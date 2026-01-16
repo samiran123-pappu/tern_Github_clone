@@ -3,17 +3,22 @@ import User from "../models/user.model.js";
 export const getUserProfileAndRepos = async (req, res) =>{
     const {username} = req.params;
     try {
-        if (!process.env.VITE_GITHUB_TOKEN) {
+        const token = process.env.VITE_GITHUB_TOKEN;
+        console.log("Token exists:", !!token);
+        console.log("Token first 10 chars:", token ? token.substring(0, 10) + "..." : "NO TOKEN");
+        
+        if (!token) {
             console.error("VITE_GITHUB_TOKEN is not set!");
             return res.status(500).json({ error: "Server configuration error" });
         }
         
         const userRes = await fetch(`https://api.github.com/users/${username}`, {
             headers: {
-                authorization: `token ${process.env.VITE_GITHUB_TOKEN}`
+                authorization: `token ${token}`
             }
         });
         const userProfile = await userRes.json();
+        console.log("GitHub API response:", userProfile.message || "Success");
         
         if (userProfile.message) {
             return res.status(404).json({ error: userProfile.message });
@@ -21,7 +26,7 @@ export const getUserProfileAndRepos = async (req, res) =>{
         
         const repoRes = await fetch(userProfile.repos_url, {
             headers:{
-                authorization: `token ${process.env.VITE_GITHUB_TOKEN}`
+                authorization: `token ${token}`
             }
         })
         const userRepos = await repoRes.json();
