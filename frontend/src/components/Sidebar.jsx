@@ -4,8 +4,10 @@ import { FaHeart } from "react-icons/fa";
 import { MdEditDocument, MdOutlineExplore } from "react-icons/md";
 import { SlLogin } from "react-icons/sl";
 import Logout from "./Logout";
+import { useAuthContext } from "../context/AuthContext";
+
 const Sidebar = () => {
-    const authUser = true;
+    const { authUser } = useAuthContext();
 
     return (
         <aside
@@ -44,7 +46,7 @@ const Sidebar = () => {
                     </Link>
                 )}
 
-                {authUser && (
+                {!authUser && (
                     <Link
                         to='/login'
                         className='p-1.5 focus:outline-nones transition-colors duration-200 rounded-lg hover:bg-gray-800'
@@ -53,7 +55,7 @@ const Sidebar = () => {
                     </Link>
                 )}
 
-                {authUser && (
+                {!authUser && (
                     <Link
                         to='/signup'
                         className='p-1.5 focus:outline-nones transition-colors duration-200 rounded-lg hover:bg-gray-800'

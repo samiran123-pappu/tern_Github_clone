@@ -1,0 +1,31 @@
+{
+  "name": "github_clone",
+  "version": "1.0.0",
+  "description": "Making Git Clone",
+  "keywords": [
+    "yes"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "yes"
+  },
+  "license": "ISC",
+  "author": "Samiran",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon backend/server.js"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "express-session": "^1.18.2",
+    "mongoose": "^9.1.3",
+    "passport": "^0.7.0",
+    "passport-github2": "^0.1.12"
+  }
+}

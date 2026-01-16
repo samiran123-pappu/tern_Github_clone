@@ -17,35 +17,18 @@ const HomePage = () => {
     const getUserProfileAndRepos = useCallback(async (username = "samiran123-pappu") => {
         setLoading(true);
         try {
-            const userRes = await fetch(`https://api.github.com/users/${username}`, {
-                headers: {
-                    authorization: `token ${import.meta.env.VITE_GITHUB_TOKEN}`
-
-                }
-            });
-            const userProfile = await userRes.json();
-            setUserProfile(userProfile);
-
-
-            const reposRes = await fetch(userProfile.repos_url);
-            const repos = await reposRes.json();
+            const res = await fetch(`/api/users/profile/${username}`);
+            const { repos, userProfile } = await res.json();
             repos.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
             setRepos(repos);
-            console.log("repos", repos);
-            console.log("userProfile", userProfile);
+            setUserProfile(userProfile);
             return { userProfile, repos }; // return data for onSearch function
-
         } catch (error) {
-            console.error("Error fetching data:", error);
             toast.error("Failed to fetch user data.");
-
         } finally {
             setLoading(false);
         }
-
-
-    }, []
-    );
+    }, []);
 
 
     useEffect(() => {

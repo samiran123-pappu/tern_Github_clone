@@ -11,25 +11,17 @@ const ExplorePage = () => {
         setLoading(true);
         setRepos([]);
         try {
-            const res = await fetch(`https://api.github.com/search/repositories?q=language:${language}&sort=stars&order=desc&per_page=10`,
-                {
-                    headers: {
-                        authorization: `token ${import.meta.env.VITE_GITHUB_TOKEN}`
-                    }
-                }
-            );
-            const data = await res.json();
-            setRepos(data.items);
-            console.log("Explored Repos:", data.items);
+            const res = await fetch("/api/explore/repos/" + language);
+            const { repos } = await res.json();
+            setRepos(repos);
+
             setSelectedLanguage(language);
-
         } catch (error) {
-            toast.error("Failed to fetch repositories.");
-
+            toast.error(error.message);
         } finally {
             setLoading(false);
         }
-    }
+    };
 
     return (
         <div className='px-4'>
