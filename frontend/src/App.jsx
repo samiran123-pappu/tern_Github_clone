@@ -39,4 +39,3 @@ function App() {
 export default App
 
 
-// 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
