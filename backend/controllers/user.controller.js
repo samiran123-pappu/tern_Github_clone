@@ -3,12 +3,22 @@ import User from "../models/user.model.js";
 export const getUserProfileAndRepos = async (req, res) =>{
     const {username} = req.params;
     try {
+        if (!process.env.GITHUB_TOKEN) {
+            console.error("GITHUB_TOKEN is not set!");
+            return res.status(500).json({ error: "Server configuration error" });
+        }
+        
         const userRes = await fetch(`https://api.github.com/users/${username}`, {
             headers: {
                 authorization: `token ${process.env.GITHUB_TOKEN}`
             }
         });
         const userProfile = await userRes.json();
+        
+        if (userProfile.message) {
+            return res.status(404).json({ error: userProfile.message });
+        }
+        
         const repoRes = await fetch(userProfile.repos_url, {
             headers:{
                 authorization: `token ${process.env.GITHUB_TOKEN}`
@@ -18,6 +28,7 @@ export const getUserProfileAndRepos = async (req, res) =>{
         res.json({ userProfile, profile: userProfile, repos: userRepos });
     
     } catch (error) {
+        console.error("Error fetching profile:", error);
       	res.status(500).json({ error: error.message });
     }
 
